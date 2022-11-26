@@ -74,10 +74,10 @@ class CharDataset(Dataset):
         # print(1111, )
         chat_token = self.tokenizer.tokenize(self._data[idx] + self.eos)
         # print(2222, )
-        labels_ids = self.tokenizer.convert_tokens_to_ids([0])
-        # print(3333, )
-        while len(labels_ids) < self.max_len:
-            labels_ids += [self.tokenizer.pad_token_id]
+        # labels_ids = self.tokenizer.convert_tokens_to_ids([0])
+        # # print(3333, )
+        # while len(labels_ids) < self.max_len:
+        #     labels_ids += [self.tokenizer.pad_token_id]
         # print(4444, )
         mask = [0] * self.max_len
         token_ids = self.tokenizer.convert_tokens_to_ids(chat_token)
@@ -85,9 +85,9 @@ class CharDataset(Dataset):
         while len(token_ids) < self.max_len:
             token_ids += [self.tokenizer.pad_token_id]
         # print(6666, )
-        print(1111, token_ids[:self.max_len], np.array(mask)[:self.max_len], labels_ids)
-        print(2222, len(token_ids[:self.max_len]), len(np.array(mask)[:self.max_len]), len(labels_ids))
-        return token_ids[:self.max_len], np.array(mask)[:self.max_len], labels_ids
+        # print(1111, token_ids[:self.max_len], np.array(mask)[:self.max_len], labels_ids)
+        # print(2222, len(token_ids[:self.max_len]), len(np.array(mask)[:self.max_len]), len(labels_ids))
+        return token_ids[:self.max_len], np.array(mask)[:self.max_len], None
 
 
 class KoGPT2Chat(LightningModule):
