@@ -54,7 +54,7 @@ data = {0: '<usr>팔이 부러진 사업가.<sys>팔이 부러진 사업가.<usr
 
 
 class CharDataset(Dataset):
-    def __init__(self, chats=data.values(), max_len=32):
+    def __init__(self, chats, max_len=32):
         self._data = chats
         self.first = True
         self.q_token = U_TKN
@@ -158,7 +158,7 @@ class KoGPT2Chat(LightningModule):
 
     def train_dataloader(self):
         # data = pd.read_csv('Chatbot_data/ChatbotData.csv')
-        self.train_set = CharDataset(max_len=self.hparams.max_len)
+        self.train_set = CharDataset(list(data.values()), max_len=self.hparams.max_len)
         train_dataloader = DataLoader(
             self.train_set, batch_size=self.hparams.batch_size, num_workers=2,
             shuffle=True, collate_fn=None)
