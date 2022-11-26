@@ -54,7 +54,7 @@ TOKENIZER = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2",
 
 
 class CharDataset(Dataset):
-    def __init__(self, chats=my_data, max_len=128):
+    def __init__(self, chats=my_data, max_len=256):
         self._data = list(chats.values())
         self.first = True
         self.q_token = U_TKN
@@ -126,8 +126,8 @@ class KoGPT2Chat(LightningModule):
         parser = argparse.ArgumentParser(parents=[parent_parser], add_help=False)
         parser.add_argument('--max-len',
                             type=int,
-                            default=128,
-                            help='max sentence length on input (default: 128)')
+                            default=256,
+                            help='max sentence length on input (default: 256)')
 
         parser.add_argument('--batch-size',
                             type=int,
