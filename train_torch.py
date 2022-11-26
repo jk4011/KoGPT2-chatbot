@@ -79,7 +79,7 @@ class CharDataset(Dataset):
         token_ids = self.tokenizer.convert_tokens_to_ids(chat_token)
         while len(token_ids) < self.max_len:
             token_ids += [self.tokenizer.pad_token_id]
-
+        print(1111, token_ids[:self.max_len], np.array(mask)[:self.max_len], labels_ids)
         return token_ids[:self.max_len], np.array(mask)[:self.max_len], labels_ids
 
 
