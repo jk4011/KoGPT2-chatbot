@@ -101,7 +101,8 @@ class CharDataset(Dataset):
         mask = [0] * q_len + [1] * a_len + [0] * (self.max_len - q_len - a_len)
         self.max_len
 
-        print(1111, labels)
+        print(1111, q_toked + a_toked)
+        print(2222, labels)
         labels_ids = self.tokenizer.convert_tokens_to_ids(labels)
         while len(labels_ids) < self.max_len:
             labels_ids += [self.tokenizer.pad_token_id]
