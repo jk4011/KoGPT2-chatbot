@@ -54,7 +54,7 @@ data = {0: '<usr>팔이 부러진 사업가.<sys>팔이 부러진 사업가.<usr
 
 
 class CharDataset(Dataset):
-    def __init__(self, chats=data.values(), max_len=64):
+    def __init__(self, chats=data.values(), max_len=32):
         self._data = chats
         self.first = True
         self.q_token = U_TKN
@@ -71,7 +71,7 @@ class CharDataset(Dataset):
         return len(self._data)
 
     def __getitem__(self, idx):
-        chat_token = self.tokenizer.tokenize(self.chats[idx] + self.eos)
+        chat_token = self.tokenizer.tokenize(self._data[idx] + self.eos)
         labels_ids = self.tokenizer.convert_tokens_to_ids(0)
         while len(labels_ids) < self.max_len:
             labels_ids += [self.tokenizer.pad_token_id]
