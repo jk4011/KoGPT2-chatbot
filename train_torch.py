@@ -197,13 +197,11 @@ class KoGPT2Chat(LightningModule):
         tok = TOKENIZER
         with torch.no_grad():
             while 1:
-                print(1111, )
                 q = input('user > ').strip()
                 if q == 'quit':
                     break
                 a = ''
-                print(1111, )
-                while 1:
+                for i in range(100):
                     input_ids = torch.LongTensor(tok.encode(U_TKN + q + SENT + sent + S_TKN + a)).unsqueeze(dim=0)
                     pred = self(input_ids)
                     gen = tok.convert_ids_to_tokens(
@@ -213,7 +211,6 @@ class KoGPT2Chat(LightningModule):
                     if gen == EOS:
                         break
                     a += gen.replace('▁', ' ')
-                print(2222, )
                 print("Simsimi > {}".format(a.strip()))
 
 
