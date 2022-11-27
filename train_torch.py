@@ -11,7 +11,7 @@ from pytorch_lightning.core.lightning import LightningModule
 from torch.utils.data import DataLoader, Dataset
 from transformers.optimization import AdamW, get_cosine_schedule_with_warmup
 from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
-from data import my_data
+from data import my_data, chat_bot_data
 
 parser = argparse.ArgumentParser(description='Simsimi based on KoGPT-2')
 
@@ -193,25 +193,26 @@ class KoGPT2Chat(LightningModule):
             shuffle=True, collate_fn=self._collate_fn)
         return train_dataloader
 
-    def chat(self, sent='0'):
+    def chat(self, q):
+        sent = '0'
         tok = TOKENIZER
+        print(f"User > {q}")
         with torch.no_grad():
-            while 1:
-                q = input('user > ').strip()
-                if q == 'quit':
+            q = input('user > ').strip()
+            if q == 'quit':
+                break
+            a = ''
+            for i in range(100):
+                input_ids = torch.LongTensor(tok.encode(U_TKN + q + SENT + sent + S_TKN + a)).unsqueeze(dim=0)
+                pred = self(input_ids)
+                gen = tok.convert_ids_to_tokens(
+                    torch.argmax(
+                        pred,
+                        dim=-1).squeeze().numpy().tolist())[-1]
+                if gen == EOS:
                     break
-                a = ''
-                for i in range(100):
-                    input_ids = torch.LongTensor(tok.encode(U_TKN + q + SENT + sent + S_TKN + a)).unsqueeze(dim=0)
-                    pred = self(input_ids)
-                    gen = tok.convert_ids_to_tokens(
-                        torch.argmax(
-                            pred,
-                            dim=-1).squeeze().numpy().tolist())[-1]
-                    if gen == EOS:
-                        break
-                    a += gen.replace('▁', ' ')
-                print("Simsimi > {}".format(a.strip()))
+                a += gen.replace('▁', ' ')
+            print("Simsimi > {}".format(a.strip()))
 
 
 parser = KoGPT2Chat.add_model_specific_args(parser)
@@ -240,4 +241,5 @@ if __name__ == "__main__":
         logging.info('best model path {}'.format(checkpoint_callback.best_model_path))
     if args.chat:
         model = KoGPT2Chat.load_from_checkpoint(args.model_params)
-        model.chat()
+        for chat in chat_bot_data:
+            model.chat(chat)
