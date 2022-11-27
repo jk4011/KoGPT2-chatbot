@@ -198,7 +198,6 @@ class KoGPT2Chat(LightningModule):
         tok = TOKENIZER
         print(f"User > {q}")
         with torch.no_grad():
-            q = input('user > ').strip()
             if q == 'quit':
                 exit()
             a = ''
